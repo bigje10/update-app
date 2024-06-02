@@ -1,0 +1,130 @@
+{
+    "name": "electron-updater-app",
+    "version": "1.0.1",
+    "description": "Electron Updater App - Description",
+    "author": {
+        "name": "Natan Cabral",
+        "email": "natancabral@hotmail.com",
+        "url": "https://github.com/natancabral"
+    },
+    "release": {
+        "provider": "github",
+        "owner": "natancabral",
+        "repo": "electron-updater-app",
+        "releases": "https://github.com/natancabral/electron-updater-app/releases/",
+        "template": "https://github.com/[owner]/[repo]/releases/download/v[version]/[repo]-[version].[extension]"
+    },
+    "main": "./src/main.js",
+    "homepage": "https://github.com/natancabral/electron-updater-app",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/natancabral/electron-updater-app.git"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "electron . APP_DEV=true",
+        "start:prod": "electron . APP_DEV=false",
+        "deploy": "electron-builder build --publish never",
+        "build": "electron-builder build --config=electron-builder.yml --publish never && npm run build:rename",
+        "build:win32": "electron-builder build --config=electron-builder.yml --publish never --win --ia32 && npm run build:rename",
+        "build:win": "electron-builder build --config=electron-builder.yml --publish never --win --x64 && npm run build:rename",
+        "build:linux": "electron-builder build --config=electron-builder.yml --publish never --linux && npm run build:rename",
+        "build:all": "electron-builder build --config=electron-builder.yml --publish never --win --linux --mac && npm run build:rename",
+        "build:win32:publish": "electron-builder build --config=electron-builder.yml --publish always --win --ia32 && npm run build:rename",
+        "build:win:publish": "electron-builder build --config=electron-builder.ymlnp --publish always --win --x64 && npm run build:rename",
+        "build:linux:publish": "electron-builder build --config=electron-builder.yml --publish always --linux && npm run build:rename",
+        "build:all:publish": "electron-builder build --config=electron-builder.yml --publish always --win --linux --mac && npm run build:rename",
+        "build:rename": "node afterPackRenameFiles.js"
+    },
+    "license": "MIT",
+    "devDependencies": {
+        "electron": "^15.0.0",
+        "electron-builder": "^22.11.7"
+    },
+    "dependencies": {
+        "dotenv": "^10.0.0",
+        "electron-dl": "^3.2.1",
+        "electron-is-dev": "^2.0.0",
+        "electron-updater": "^4.3.9",
+        "latest-stable-version": "^1.0.1",
+        "updater": "^0.0.1"
+    },
+    "build": {
+        "afterPack": "./afterPackHook.js",
+        "asar": true,
+        "extends": null,
+        "appId": "com.natancabral.electron-updater-app",
+        "compression": "maximum",
+        "productName": "Electron Updater App",
+        "copyright": "Copyright © 2021 ${author}",
+        "publish": [
+            {
+                "provider": "github",
+                "owner": "natancabral",
+                "repo": "electron-updater-app"
+            }
+        ],
+        "win": {
+            "target": [
+                "nsis"
+            ],
+            "verifyUpdateCodeSignature": false,
+            "icon": "./assets/ico/icon.ico"
+        },
+        "nsis": {
+            "shortcutName": "${productName}",
+            "artifactName": "${name}-${version}.${ext}",
+            "oneClick": true,
+            "perMachine": true,
+            "allowElevation": true,
+            "runAfterFinish": true,
+            "createDesktopShortcut": true,
+            "createStartMenuShortcut": true,
+            "deleteAppDataOnUninstall": true,
+            "allowToChangeInstallationDirectory": false
+        },
+        "mac": {
+            "target": [
+                "dmg"
+            ],
+            "icon": "./assets/ico/mac512.icns",
+            "category": "public.app-category.graphics-design"
+        },
+        "dmg": {
+            "artifactName": "${name}-${version}.${ext}",
+            "contents": [
+                {
+                    "x": 110,
+                    "y": 150
+                },
+                {
+                    "x": 240,
+                    "y": 150,
+                    "type": "link",
+                    "path": "/Applications"
+                }
+            ],
+            "icon": "./assets/ico/mac512.icns"
+        },
+        "linux": {
+            "target": [
+                "deb",
+                "AppImage"
+            ],
+            "category": "Development"
+        },
+        "deb": {
+            "artifactName": "${name}-${version}.${ext}"
+        },
+        "directories": {
+            "output": "dist"
+        },
+        "files": [
+            "src/assets/**/*",
+            "src/*.html",
+            "src/*.js",
+            "src/*.css",
+            "publish.json"
+        ]
+    }
+}

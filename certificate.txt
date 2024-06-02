@@ -1,0 +1,12 @@
+package.json
+
+"build": {
+  "win": {
+    "certificateFile": "./certificate/certificate.pfx",
+    "certificatePassword": "[password]",
+  }
+}
+
+electron-builder.yml:
+
+NO SET HERE, only in package.js
